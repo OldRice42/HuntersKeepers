@@ -24,12 +24,17 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe HuntersImprovementsController, type: :controller do
-
+  let(:hunter) { create(:hunter) }
+  let(:improvement) { create(:improvement) }
+  let(:hunters_improvement) { HuntersImprovement.create(hunter: hunter, improvement: improvement) }
   # This should return the minimal set of attributes required to create a valid
   # HuntersImprovement. As you add validations to HuntersImprovement, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      hunter_id: hunter.id,
+      improvement_id: improvement.id
+    }
   }
 
   let(:invalid_attributes) {
@@ -42,81 +47,101 @@ RSpec.describe HuntersImprovementsController, type: :controller do
   let(:valid_session) { {} }
 
   describe "GET #index" do
+    subject { get :index, params: { hunter_id: hunter.id }, session: valid_session }
+
     it "returns a success response" do
       HuntersImprovement.create! valid_attributes
-      get :index, params: {}, session: valid_session
+      subject
       expect(response).to be_successful
     end
   end
 
   describe "GET #show" do
+    subject { get :show, params: { hunter_id: hunter.id, id: hunters_improvement.to_param }, session: valid_session }
     it "returns a success response" do
       hunters_improvement = HuntersImprovement.create! valid_attributes
-      get :show, params: {id: hunters_improvement.to_param}, session: valid_session
+      subject
       expect(response).to be_successful
     end
   end
 
   describe "GET #new" do
+    subject { get :new, params: { hunter_id: hunter.id }, session: valid_session }
+
     it "returns a success response" do
-      get :new, params: {}, session: valid_session
+      subject
       expect(response).to be_successful
     end
   end
 
   describe "GET #edit" do
+    subject { get :edit, params: { hunter_id: hunter.id, id: hunters_improvement.to_param}, session: valid_session }
     it "returns a success response" do
       hunters_improvement = HuntersImprovement.create! valid_attributes
-      get :edit, params: {id: hunters_improvement.to_param}, session: valid_session
+      subject
       expect(response).to be_successful
     end
   end
 
   describe "POST #create" do
+    subject { post :create, params: { hunter_id: hunter.id, hunters_improvement: attributes }, session: valid_session }
     context "with valid params" do
+      let(:attributes) { valid_attributes }
+
       it "creates a new HuntersImprovement" do
         expect {
-          post :create, params: {hunters_improvement: valid_attributes}, session: valid_session
+          subject
         }.to change(HuntersImprovement, :count).by(1)
       end
 
       it "redirects to the created hunters_improvement" do
-        post :create, params: {hunters_improvement: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(HuntersImprovement.last)
+        subject
+        expect(response).to redirect_to(hunter_hunters_improvement_url(hunter_id: hunter.id, id: HuntersImprovement.last.id))
       end
     end
 
     context "with invalid params" do
+      let(:attributes) { invalid_attributes }
+
       it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: {hunters_improvement: invalid_attributes}, session: valid_session
+        subject
         expect(response).to be_successful
       end
     end
   end
 
   describe "PUT #update" do
+    subject { put :update, params: {hunter_id: hunter.id, id: hunters_improvement.id, hunters_improvement: attributes}, session: valid_session }
+    let(:different_improvement) { create(:improvement) }
+
     context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+      let(:attributes) {
+        {
+          id: hunters_improvement.id,
+          hunter_id: hunter.id,
+          improvement_id: different_improvement.id
+        }
       }
 
       it "updates the requested hunters_improvement" do
-        hunters_improvement = HuntersImprovement.create! valid_attributes
-        put :update, params: {id: hunters_improvement.to_param, hunters_improvement: new_attributes}, session: valid_session
+        hunters_improvement
+        subject
         hunters_improvement.reload
-        skip("Add assertions for updated state")
+        expect(hunters_improvement.improvement).to eq different_improvement
       end
 
       it "redirects to the hunters_improvement" do
-        hunters_improvement = HuntersImprovement.create! valid_attributes
-        put :update, params: {id: hunters_improvement.to_param, hunters_improvement: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(hunters_improvement)
+        hunters_improvement
+        subject
+        expect(response).to redirect_to(hunter_hunters_improvement_url(hunter_id: hunter.id, id: hunters_improvement.id))
       end
     end
 
     context "with invalid params" do
+      let(:attributes) { invalid_attributes }
+
       it "returns a success response (i.e. to display the 'edit' template)" do
-        hunters_improvement = HuntersImprovement.create! valid_attributes
+        hunters_improvement
         put :update, params: {id: hunters_improvement.to_param, hunters_improvement: invalid_attributes}, session: valid_session
         expect(response).to be_successful
       end
@@ -124,18 +149,19 @@ RSpec.describe HuntersImprovementsController, type: :controller do
   end
 
   describe "DELETE #destroy" do
+    subject { delete :destroy, params: {hunter_id: hunter.id, id: hunters_improvement.to_param}, session: valid_session }
+
     it "destroys the requested hunters_improvement" do
-      hunters_improvement = HuntersImprovement.create! valid_attributes
+      hunters_improvement
       expect {
-        delete :destroy, params: {id: hunters_improvement.to_param}, session: valid_session
+        subject
       }.to change(HuntersImprovement, :count).by(-1)
     end
 
     it "redirects to the hunters_improvements list" do
       hunters_improvement = HuntersImprovement.create! valid_attributes
-      delete :destroy, params: {id: hunters_improvement.to_param}, session: valid_session
-      expect(response).to redirect_to(hunters_improvements_url)
+      subject
+      expect(response).to redirect_to(hunter_hunters_improvements_url)
     end
   end
-
 end
