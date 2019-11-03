@@ -2,21 +2,15 @@ require 'rails_helper'
 
 RSpec.describe "improvements/show", type: :view do
   before(:each) do
-    @improvement = assign(:improvement, Improvement.create!(
-      :description => "Description",
-      :type => "Type",
-      :move_id => 2,
-      :rating => 3,
-      :stat_limit => 4
-    ))
+    @improvement = assign(:improvement, create(:improvement))
   end
 
   it "renders attributes in <p>" do
     render
-    expect(rendered).to match(/Description/)
-    expect(rendered).to match(/Type/)
-    expect(rendered).to match(/2/)
-    expect(rendered).to match(/3/)
-    expect(rendered).to match(/4/)
+    expect(rendered).to match(/#{@improvement.description}/)
+    expect(rendered).to match(/#{@improvement.type}/)
+    expect(rendered).to match(/#{@improvement.move_id}/)
+    expect(rendered).to match(/#{@improvement.rating}/)
+    expect(rendered).to match(/#{@improvement.stat_limit}/)
   end
 end

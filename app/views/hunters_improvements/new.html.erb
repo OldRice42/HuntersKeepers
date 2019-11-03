@@ -2,4 +2,4 @@
 
 <%= render 'form', hunters_improvement: @hunters_improvement %>
 
-<%= link_to 'Back', hunter_hunters_improvements_path %>
+<%= link_to 'Back', hunter_hunters_improvements_path(hunter_id: @hunters_improvement.hunter_id) %>

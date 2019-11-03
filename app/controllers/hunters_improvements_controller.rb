@@ -32,7 +32,7 @@ class HuntersImprovementsController < ApplicationController
     respond_to do |format|
       if @hunters_improvement.save
         format.html { redirect_to hunter_hunters_improvement_url(hunter_id: @hunter.id, id: @hunters_improvement.id), notice: 'Hunters improvement was successfully created.' }
-        format.json { render :show, status: :created, location: hunter_hunters_improvement_url(@hunters_improvement) }
+        format.json { render :show, status: :created, location: hunter_hunters_improvement_url(hunter_id: @hunter.id, id: @hunters_improvement.id) }
       else
         format.html { render :new }
         format.json { render json: @hunters_improvement.errors, status: :unprocessable_entity }
@@ -46,7 +46,7 @@ class HuntersImprovementsController < ApplicationController
     respond_to do |format|
       if @hunters_improvement.update(hunters_improvement_params)
         format.html { redirect_to hunter_hunters_improvement_url(hunter_id: @hunter.id, id: @hunters_improvement.id), notice: 'Hunters improvement was successfully updated.' }
-        format.json { render :show, status: :ok, location: hunter_hunters_improvement_url(@hunters_improvement) }
+        format.json { render :show, status: :ok, location: hunter_hunters_improvement_url(hunter_id: @hunter.id, id: @hunters_improvement.id) }
       else
         format.html { render :edit }
         format.json { render json: @hunters_improvement.errors, status: :unprocessable_entity }

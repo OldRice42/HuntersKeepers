@@ -1,31 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe "improvements/index", type: :view do
+  let(:improvements) { create_list(:improvement, 2) }
   before(:each) do
-    assign(:improvements, [
-      Improvement.create!(
-        :description => "Description",
-        :type => "Type",
-        :move_id => 2,
-        :rating => 3,
-        :stat_limit => 4
-      ),
-      Improvement.create!(
-        :description => "Description",
-        :type => "Type",
-        :move_id => 2,
-        :rating => 3,
-        :stat_limit => 4
-      )
-    ])
+    assign(:improvements, improvements)
   end
 
   it "renders a list of improvements" do
     render
-    assert_select "tr>td", :text => "Description".to_s, :count => 2
-    assert_select "tr>td", :text => "Type".to_s, :count => 2
-    assert_select "tr>td", :text => 2.to_s, :count => 2
-    assert_select "tr>td", :text => 3.to_s, :count => 2
-    assert_select "tr>td", :text => 4.to_s, :count => 2
+    improvements.pluck(:description).each do |description|
+      assert_select "tr>td", text: description
+    end
+    improvements.pluck(:move_id).each do |move_id|
+      assert_select "tr>td", text: move_id.to_s
+    end
+    improvements.pluck(:rating).each do |rating|
+      assert_select "tr>td", text: rating
+    end
+    improvements.pluck(:stat_limit).each do |stat_limit|
+      assert_select "tr>td", text: stat_limit.to_s
+    end
   end
 end
