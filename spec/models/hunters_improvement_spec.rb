@@ -12,19 +12,34 @@ RSpec.describe HuntersImprovement, type: :model do
 
     it 'applies the improvement to the hunter' do
       subject
-      # expect(improvement).to have_received(:apply).with(hunter)
       expect(hunter.improvements).to include(improvement)
+    end
+
+    context 'hunter hits max from improvement' do
+      let(:improvement) { create(:rating_boost, rating: 0, stat_limit: 3) }
+      let(:hunter) { create :hunter, charm: 2 }
+
+      it 'hunter improvement is still valid' do
+        expect { subject }.to change(hunter, :charm).from(2).to(3)
+        hunters_improvement = hunter.hunters_improvements.last
+        expect(hunters_improvement).to be_valid
+        expect(hunter).to be_valid
+      end
     end
 
     context 'hunter does not pass improvement validations' do
       let(:errors) { ['Rating would exceed max for improvement.'] }
 
       before do
+        allow(improvement).to receive(:valid_hunter?).and_return(false)
         allow(improvement).to receive(:hunter_errors).and_return(errors)
       end
 
       it 'shows errors' do
         expect{ subject }.to raise_error(ActiveRecord::RecordInvalid)
+        hunters_improvement = hunter.hunters_improvements.last
+        expect(hunters_improvement).not_to be_valid
+        expect(hunters_improvement.errors.full_messages).to include("Hunter #{errors.first}")
         expect(hunter).not_to be_valid
         expect(hunter.errors.full_messages.to_sentence).to include(errors.first)
       end
