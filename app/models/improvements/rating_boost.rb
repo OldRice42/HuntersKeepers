@@ -16,7 +16,7 @@ module Improvements
     def hunter_errors(hunter)
       errors = []
       unless under_max_limit?(hunter)
-        errors.add("#{rating} rating would exceed max for improvement.")
+        errors << "#{rating} rating would exceed max for improvement."
       end
     end
   end
