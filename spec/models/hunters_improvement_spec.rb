@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe HuntersImprovement, type: :model do
@@ -36,7 +38,7 @@ RSpec.describe HuntersImprovement, type: :model do
       end
 
       it 'shows errors' do
-        expect{ subject }.to raise_error(ActiveRecord::RecordInvalid)
+        expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
         hunters_improvement = hunter.hunters_improvements.last
         expect(hunters_improvement).not_to be_valid
         expect(hunters_improvement.errors.full_messages).to include("Hunter #{errors.first}")

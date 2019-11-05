@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :improvement do
-    description { "MyString" }
-    type { "" }
+    description { 'MyString' }
+    type { '' }
     rating { 1 }
     stat_limit { 1 }
   end
 
   factory :rating_boost, class: Improvements::RatingBoost do
-    description { "Get +1 Charm, max +3" }
-    type { "Improvements::RatingBoost" }
+    description { 'Get +1 Charm, max +3' }
+    type { 'Improvements::RatingBoost' }
     rating { 0 } # Charm
     stat_limit { 3 }
   end
