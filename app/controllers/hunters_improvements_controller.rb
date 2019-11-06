@@ -37,7 +37,9 @@ class HuntersImprovementsController < ApplicationController
                       notice: 'Hunters improvement was successfully created.'
         end
         format.json do
-          render :show, status: :created, location: hunter_hunters_improvement_url(hunter_id: @hunter.id, id: @hunters_improvement.id)
+          render :show,
+                 status: :created,
+                 location: hunter_hunters_improvement_url(hunter_id: @hunter.id, id: @hunters_improvement.id)
         end
       else
         format.html { render :new }
@@ -56,7 +58,9 @@ class HuntersImprovementsController < ApplicationController
                       notice: 'Hunters improvement was successfully updated.'
         end
         format.json do
-          render :show, status: :ok, location: hunter_hunters_improvement_url(hunter_id: @hunter.id, id: @hunters_improvement.id)
+          render :show,
+                 status: :ok,
+                 location: hunter_hunters_improvement_url(hunter_id: @hunter.id, id: @hunters_improvement.id)
         end
       else
         format.html { render :edit }
@@ -70,7 +74,9 @@ class HuntersImprovementsController < ApplicationController
   def destroy
     @hunters_improvement.destroy
     respond_to do |format|
-      format.html { redirect_to hunter_hunters_improvements_url, notice: 'Hunters improvement was successfully destroyed.' }
+      format.html do
+        redirect_to hunter_hunters_improvements_url, notice: 'Hunters improvement was successfully destroyed.'
+      end
       format.json { head :no_content }
     end
   end
