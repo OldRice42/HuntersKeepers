@@ -46,5 +46,16 @@ RSpec.describe HuntersImprovement, type: :model do
         expect(hunter.errors.full_messages.to_sentence).to include(errors.first)
       end
     end
+
+    context 'improvement already exists on hunter' do
+      subject { HuntersImprovement.create(hunter: hunter, improvement: improvement) }
+
+      let!(:hunt_improv) { HuntersImprovement.create(hunter: hunter, improvement: improvement) }
+
+      it 'does not add improvement again' do
+        expect(subject).not_to be_valid
+        expect(hunter.improvements.count).to eq 1
+      end
+    end
   end
 end
