@@ -2,10 +2,8 @@
 
 FactoryBot.define do
   factory :improvement do
-    description { 'MyString' }
-    type { '' }
-    rating { 1 }
-    stat_limit { 1 }
+    description { 'Gain an Ally' }
+    type { nil }
   end
 
   factory :rating_boost, class: Improvements::RatingBoost do
